@@ -22,12 +22,6 @@ import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 public class PentagonRadarChartRenderer extends LineRadarRenderer {
-
-    public static final int RADIUS = 8;
-    /**
-     * Half of the curve length
-     **/
-    public static final int DIST = 48;
     private final DashPathEffect dashPathEffect;
     protected RadarChart mChart;
     /**
@@ -134,7 +128,7 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
             // draw the dots for each edge
             int preColor = mWebPaint.getColor();
             mWebPaint.setColor(Color.WHITE);
-            c.drawCircle(pOut.x, pOut.y, RADIUS, mWebPaint);
+            c.drawCircle(pOut.x, pOut.y, mChart.getEdgeValueRadius(), mWebPaint);
             mWebPaint.setColor(preColor);
         }
 
@@ -153,9 +147,12 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
                 drawFilledPath(c, surface, drawable);
             } else {
 
-                drawGradientFilledPath(c, surface, Color.argb(128, 0, 190, 255),
-                        Color.argb(128, 20, 140, 220), 0, mChart.getHeight());
-                //drawFilledPath(c, surface, dataSet.getFillColor(), dataSet.getFillAlpha());
+                if (mChart.isDrawGradientArea()) {
+                    drawGradientFilledPath(c, surface, mChart.getFilledAreaStartColor(),
+                            mChart.getFilledAreaEndColor(), 0, mChart.getHeight());
+                } else {
+                    drawFilledPath(c, surface, dataSet.getFillColor(), dataSet.getFillAlpha());
+                }
             }
         }
 
@@ -346,6 +343,8 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
 
             path.reset();
 
+            int distance = mChart.getDistanceToEdgeCurve();
+
             for (int i = 0; i < entryCount; i++) {
                 float r = (mChart.getYAxis().mEntries[j] - mChart.getYChartMin()) * factor;
 
@@ -355,8 +354,8 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
                 point.x = p1out.getX();
                 point.y = p1out.getY();
 
-                double xDiff = Math.cos(Math.toRadians(36)) * DIST;
-                double yDiff = Math.sin(Math.toRadians(36)) * DIST;
+                double xDiff = Math.cos(Math.toRadians(36)) * distance;
+                double yDiff = Math.sin(Math.toRadians(36)) * distance;
 
                 // Draw the Pentagon :
                 // calculate the closing points in pair
@@ -377,19 +376,19 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
                         xLeft = (float) (point.x - xDiff);
                         yLeft = (float) (point.y - yDiff);
 
-                        xRight = (float) (point.x - Math.cos(Math.toRadians(72)) * DIST);
-                        yRight = (float) (point.y + Math.sin(Math.toRadians(72)) * DIST);
+                        xRight = (float) (point.x - Math.cos(Math.toRadians(72)) * distance);
+                        yRight = (float) (point.y + Math.sin(Math.toRadians(72)) * distance);
 
                         path.lineTo(xLeft, yLeft);
                         path.quadTo(point.x, point.y, xRight, yRight);
 
                         break;
                     case 2:
-                        float tmp = (float) Math.cos(Math.toRadians(36)) * DIST * 2;
-                        xLeft = (float) (point.x + tmp * Math.cos(Math.toRadians(36)) - DIST);
+                        float tmp = (float) Math.cos(Math.toRadians(36)) * distance * 2;
+                        xLeft = (float) (point.x + tmp * Math.cos(Math.toRadians(36)) - distance);
                         yLeft = (float) (point.y - tmp * Math.sin(Math.toRadians(36)));
 
-                        xRight = point.x - DIST;
+                        xRight = point.x - distance;
                         yRight = point.y;
 
                         path.lineTo(xLeft, yLeft);
@@ -397,11 +396,11 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
 
                         break;
                     case 3:
-                        tmp = (float) Math.cos(Math.toRadians(36)) * DIST * 2;
-                        xRight = (float) (point.x - (tmp * Math.cos(Math.toRadians(36)) - DIST));
+                        tmp = (float) Math.cos(Math.toRadians(36)) * distance * 2;
+                        xRight = (float) (point.x - (tmp * Math.cos(Math.toRadians(36)) - distance));
                         yRight = (float) (point.y - tmp * Math.sin(Math.toRadians(36)));
 
-                        xLeft = point.x + DIST;
+                        xLeft = point.x + distance;
                         yLeft = point.y;
 
                         path.lineTo(xLeft, yLeft);
@@ -409,8 +408,8 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
 
                         break;
                     case 4:
-                        xLeft = (float) (point.x + Math.cos(Math.toRadians(72)) * DIST);
-                        yLeft = (float) (point.y + Math.sin(Math.toRadians(72)) * DIST);
+                        xLeft = (float) (point.x + Math.cos(Math.toRadians(72)) * distance);
+                        yLeft = (float) (point.y + Math.sin(Math.toRadians(72)) * distance);
 
                         xRight = (float) (point.x + xDiff);
                         yRight = (float) (point.y - yDiff);

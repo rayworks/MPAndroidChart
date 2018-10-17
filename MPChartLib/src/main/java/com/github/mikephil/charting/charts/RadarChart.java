@@ -64,6 +64,31 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
      */
     private YAxis mYAxis;
 
+    /**
+     * Start color for the data path area
+     */
+    private int mFilledAreaStartColor;
+
+    /***
+     * End color for the data path area
+     */
+    private int mFilledAreaEndColor;
+
+    /***
+     * flag indicating whether path area should be filled with gradient color
+     */
+    private boolean mDrawGradientArea;
+
+    /***
+     * The dot radius for each value
+     */
+    private int mEdgeValueRadius = 8;
+
+    /**
+     * Half of the curve length
+     **/
+    private int mDistanceToEdgeCurve = 48;
+
     protected YAxisRendererRadarChart mYAxisRenderer;
     protected XAxisRendererRadarChart mXAxisRenderer;
 
@@ -357,5 +382,51 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
      */
     public float getYRange() {
         return mYAxis.mAxisRange;
+    }
+
+
+    public int getFilledAreaStartColor() {
+        return mFilledAreaStartColor;
+    }
+
+    public RadarChart setFilledAreaStartColor(int color) {
+        this.mFilledAreaStartColor = color;
+        return this;
+    }
+
+    public int getFilledAreaEndColor() {
+        return mFilledAreaEndColor;
+    }
+
+    public RadarChart setFilledAreaEndColor(int color) {
+        this.mFilledAreaEndColor = color;
+        return this;
+    }
+
+    public RadarChart setDrawGradientArea(boolean enabled) {
+        this.mDrawGradientArea = enabled;
+        return this;
+    }
+
+    public boolean isDrawGradientArea() {
+        return mDrawGradientArea;
+    }
+
+    public int getEdgeValueRadius() {
+        return mEdgeValueRadius;
+    }
+
+    public RadarChart setEdgeValueRadius(int radius) {
+        this.mEdgeValueRadius = radius;
+        return this;
+    }
+
+    public int getDistanceToEdgeCurve() {
+        return mDistanceToEdgeCurve;
+    }
+
+    public RadarChart setDistanceToEdgeCurve(int distance) {
+        this.mDistanceToEdgeCurve = distance;
+        return this;
     }
 }
