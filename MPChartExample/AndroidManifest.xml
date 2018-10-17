@@ -2,22 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xxmassdeveloper.mpchartexample"
     android:versionCode="55"
-    android:versionName="3.0.2" >
+    android:versionName="3.0.2">
 
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="25" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/ic_launcher" 
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name="com.xxmassdeveloper.mpchartexample.notimportant.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +28,7 @@
         <activity android:name="LineChartActivity2"></activity>
         <activity android:name=".LineChartTime"></activity>
         <activity android:name="BarChartActivity"></activity>
-		<activity android:name="HorizontalBarChartActivity"></activity>
+        <activity android:name="HorizontalBarChartActivity"></activity>
         <activity android:name="PieChartActivity"></activity>
         <activity android:name="PiePolylineChartActivity"></activity>
         <activity android:name="MultiLineChartActivity"></activity>
@@ -66,6 +66,7 @@
         <activity android:name=".BarChartPositiveNegative"></activity>
         <activity android:name=".FilledLineActivity"></activity>
         <activity android:name=".HalfPieChartActivity"></activity>
+        <activity android:name=".RoundedRadarChartActivity" />
     </application>
 
 </manifest>

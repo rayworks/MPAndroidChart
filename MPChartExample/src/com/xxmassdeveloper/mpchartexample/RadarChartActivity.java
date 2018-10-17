@@ -29,14 +29,15 @@ import java.util.ArrayList;
 
 public class RadarChartActivity extends DemoBase {
 
-    private RadarChart mChart;
+    protected RadarChart mChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_radarchart_noseekbar);
+
+        setContentView(getRadarChartLayoutResource());
 
         TextView tv = findViewById(R.id.textView);
         tv.setTypeface(mTfLight);
@@ -97,6 +98,10 @@ public class RadarChartActivity extends DemoBase {
         l.setXEntrySpace(7f);
         l.setYEntrySpace(5f);
         l.setTextColor(Color.WHITE);
+    }
+
+    protected int getRadarChartLayoutResource() {
+        return R.layout.activity_radarchart_noseekbar;
     }
 
     @Override
