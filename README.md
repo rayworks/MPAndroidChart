@@ -191,7 +191,10 @@ You can follow me on Twitter [**@PhilippJahoda**](https://twitter.com/PhilippJah
 **RadarChart** (spider web chart)
 
 ![alt tag](https://raw.github.com/PhilJay/MPAndroidChart/master/screenshots/radarchart.png)
+<br/><br/>
 
+**PentagonRadarChart** (Customized RadarChart)
+![](/screenshots/pentagon_radar_chart.png)
 <br/>
 
 # License :page_facing_up:
