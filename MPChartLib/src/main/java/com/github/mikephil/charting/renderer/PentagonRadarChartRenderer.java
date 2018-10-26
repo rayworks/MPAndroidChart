@@ -23,6 +23,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 
 public class PentagonRadarChartRenderer extends LineRadarRenderer {
     private final DashPathEffect dashPathEffect;
+    private final Paint numberPaint;
     protected RadarChart mChart;
     /**
      * paint for drawing the web
@@ -51,6 +52,9 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
         dashPathEffect = new DashPathEffect(new float[]{5, 10}, 0);
 
         mHighlightCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        numberPaint = new Paint();
+        numberPaint.setAntiAlias(true);
     }
 
     public Paint getWebPaint() {
@@ -329,6 +333,16 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
         float xLeft, yLeft;
         float xRight, yRight;
 
+        // for layer numbers
+        float bottomLeftX = .0f, bottomLeftY = .0f;
+        float bottomRightX = .0f, bottomRightY = .0f;
+
+        float numberSize = mChart.getNumberPixelSize();
+        numberPaint.setTextSize(numberSize);
+        numberPaint.setColor(mChart.getNumberTextColor());
+
+        int distance = mChart.getDistanceToEdgeCurve();
+
         int entryCount = mChart.getData().getEntryCount();
 
         MPPointF p1out = MPPointF.getInstance(0, 0);
@@ -346,8 +360,6 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
             }
 
             path.reset();
-
-            int distance = mChart.getDistanceToEdgeCurve();
 
             for (int i = 0; i < entryCount; i++) {
                 float r = (mChart.getYAxis().mEntries[j] - mChart.getYChartMin()) * factor;
@@ -395,6 +407,9 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
                         xRight = point.x - distance;
                         yRight = point.y;
 
+                        bottomRightX = point.x;
+                        bottomRightY = point.y;
+
                         path.lineTo(xLeft, yLeft);
                         path.quadTo(point.x, point.y, xRight, yRight);
 
@@ -406,6 +421,17 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
 
                         xLeft = point.x + distance;
                         yLeft = point.y;
+
+                        bottomLeftX = point.x;
+                        bottomLeftY = point.y;
+
+                        if (mChart.isDrawLayerNumber()) {
+                            // the layer number
+                            float centerX = bottomLeftX + (bottomRightX - bottomLeftX) / 2;
+                            float centerY = bottomLeftY - mChart.getNumberVerticalOffset();
+
+                            c.drawText(String.valueOf(j), centerX, centerY, numberPaint);
+                        }
 
                         path.lineTo(xLeft, yLeft);
                         path.quadTo(point.x, point.y, xRight, yRight);

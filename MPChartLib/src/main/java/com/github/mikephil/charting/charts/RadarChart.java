@@ -86,6 +86,11 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
     private boolean mDrawEdgeIcon;
     private int mEdgeIconDashLineColor;
 
+    private int mNumberTextColor = Color.BLACK;
+    private float mNumberPixelSize = 16.0f;
+    private int mNumberVerticalOffset = 16;
+    private boolean mDrawLayerNumber = false;
+
     public RadarChart(Context context) {
         super(context);
     }
@@ -96,6 +101,78 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
 
     public RadarChart(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+    }
+
+    /***
+     * Gets the text color for layer number
+     * @return
+     */
+    public int getNumberTextColor() {
+        return mNumberTextColor;
+    }
+
+    /***
+     * Sets the text color for layer number
+     * @param numberTextColor
+     * @return
+     */
+    public RadarChart setNumberTextColor(int numberTextColor) {
+        this.mNumberTextColor = numberTextColor;
+        return this;
+    }
+
+    /***
+     * Whether to draw layer numbers
+     * @return
+     */
+    public boolean isDrawLayerNumber() {
+        return mDrawLayerNumber;
+    }
+
+    /***
+     * Enables drawing layer numbers
+     * @param drawLayerNumber
+     * @return
+     */
+    public RadarChart setDrawLayerNumber(boolean drawLayerNumber) {
+        this.mDrawLayerNumber = drawLayerNumber;
+        return this;
+    }
+
+    /***
+     * Gets the vertical offset for number
+     * @return
+     */
+    public int getNumberVerticalOffset() {
+        return mNumberVerticalOffset;
+    }
+
+    /***
+     * Sets the vertical offset for number
+     * @param numberVerticalOffset
+     * @return
+     */
+    public RadarChart setNumberVerticalOffset(int numberVerticalOffset) {
+        this.mNumberVerticalOffset = numberVerticalOffset;
+        return this;
+    }
+
+    /***
+     * Gets the font size of number text
+     * @return
+     */
+    public float getNumberPixelSize() {
+        return mNumberPixelSize;
+    }
+
+    /***
+     * Sets the font size of number text
+     * @param numberPixelSize
+     * @return
+     */
+    public RadarChart setNumberPixelSize(float numberPixelSize) {
+        this.mNumberPixelSize = numberPixelSize;
+        return this;
     }
 
     public Drawable[] getEdgeDrawables() {

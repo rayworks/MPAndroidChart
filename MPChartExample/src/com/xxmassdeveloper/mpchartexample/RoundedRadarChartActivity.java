@@ -1,5 +1,6 @@
 package com.xxmassdeveloper.mpchartexample;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -25,13 +26,15 @@ public class RoundedRadarChartActivity extends RadarChartActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int startColor = Color.argb(0xCF, 0, 0xBE, 0xFF);
-        int endColor = Color.argb(0xCF, 0x14, 0x8C, 0xDC);
+        int startColor = Color.argb(0x80, 0, 0xBE, 0xFF);
+        int endColor = Color.argb(0x80, 0x14, 0x8C, 0xDC);
+
+        Resources resources = getResources();
 
         // disable the further touch events
         Drawable[] drawables = new Drawable[resDrawables.length];
         for (int i = 0; i < resDrawables.length; i++) {
-            drawables[i] = getResources().getDrawable(resDrawables[i]);
+            drawables[i] = resources.getDrawable(resDrawables[i]);
 
             // apply the tint color
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -47,7 +50,11 @@ public class RoundedRadarChartActivity extends RadarChartActivity {
                 .setFilledAreaStartColor(startColor)
                 .setFilledAreaEndColor(endColor)
                 .setEdgeValueCircleColor(Color.WHITE)
-                .setEdgeValueRadius(8);
+                .setEdgeValueRadius(8)
+                .setDrawLayerNumber(true)
+                .setNumberTextColor(Color.WHITE)
+                .setNumberPixelSize(resources.getDimensionPixelSize(R.dimen.number_font_size))
+                .setNumberVerticalOffset((int) resources.getDimension(R.dimen.offset_vertical));
     }
 
     @Override
