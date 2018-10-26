@@ -1,10 +1,10 @@
-
 package com.github.mikephil.charting.charts;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
 import com.github.mikephil.charting.components.YAxis;
@@ -24,73 +24,67 @@ import com.github.mikephil.charting.utils.Utils;
  */
 public class RadarChart extends PieRadarChartBase<RadarData> {
 
+    protected YAxisRendererRadarChart mYAxisRenderer;
+    protected XAxisRendererRadarChart mXAxisRenderer;
+    protected Drawable[] mEdgeDrawables;
     /**
      * width of the main web lines
      */
     private float mWebLineWidth = 2.5f;
-
     /**
      * width of the inner web lines
      */
     private float mInnerWebLineWidth = 1.5f;
-
     /**
      * color for the main web lines
      */
     private int mWebColor = Color.rgb(122, 122, 122);
-
     /**
      * color for the inner web
      */
     private int mWebColorInner = Color.rgb(122, 122, 122);
-
     /**
      * transparency the grid is drawn with (0-255)
      */
     private int mWebAlpha = 150;
-
     /**
      * flag indicating if the web lines should be drawn or not
      */
     private boolean mDrawWeb = true;
-
     /**
      * modulus that determines how many labels and web-lines are skipped before the next is drawn
      */
     private int mSkipWebLineCount = 0;
-
     /**
      * the object reprsenting the y-axis labels
      */
     private YAxis mYAxis;
-
     /**
      * Start color for the data path area
      */
     private int mFilledAreaStartColor;
-
     /***
      * End color for the data path area
      */
     private int mFilledAreaEndColor;
-
     /***
      * flag indicating whether path area should be filled with gradient color
      */
     private boolean mDrawGradientArea;
-
     /***
      * The dot radius for each value
      */
-    private int mEdgeValueRadius = 8;
-
+    private int mEdgeValueCircleRadius = 8;
+    /**
+     * The circle color
+     */
+    private int mEdgeValueCircleColor = Color.WHITE;
     /**
      * Half of the curve length
      **/
     private int mDistanceToEdgeCurve = 48;
-
-    protected YAxisRendererRadarChart mYAxisRenderer;
-    protected XAxisRendererRadarChart mXAxisRenderer;
+    private boolean mDrawEdgeIcon;
+    private int mEdgeIconDashLineColor;
 
     public RadarChart(Context context) {
         super(context);
@@ -102,6 +96,56 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
 
     public RadarChart(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+    }
+
+    public Drawable[] getEdgeDrawables() {
+        return mEdgeDrawables;
+    }
+
+    /***
+     * Sets the drawables for top edges for the whole chart.
+     * @param drawables
+     * @return
+     */
+    public RadarChart setEdgeDrawables(Drawable[] drawables) {
+        this.mEdgeDrawables = drawables;
+        return this;
+    }
+
+    /***
+     * Whether to draw the edge icons
+     * @return
+     */
+    public boolean isDrawEdgeIcon() {
+        return mDrawEdgeIcon;
+    }
+
+    /***
+     * Enables drawing the edge icons or not.
+     * @param willDraw
+     * @return
+     */
+    public RadarChart setDrawEdgeIcon(boolean willDraw) {
+        this.mDrawEdgeIcon = willDraw;
+        return this;
+    }
+
+    /***
+     * Gets the color for dash line which join all the icons.
+     * @return
+     */
+    public int getEdgeIconDashLineColor() {
+        return mEdgeIconDashLineColor;
+    }
+
+    /***
+     * Sets the color for dash line which join all the icons.
+     * @param lineColor
+     * @return
+     */
+    public RadarChart setEdgeIconDashLineColor(int lineColor) {
+        this.mEdgeIconDashLineColor = lineColor;
+        return this;
     }
 
     @Override
@@ -237,6 +281,10 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
         return mYAxis;
     }
 
+    public float getWebLineWidth() {
+        return mWebLineWidth;
+    }
+
     /**
      * Sets the width of the web lines that come from the center.
      *
@@ -246,8 +294,8 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
         mWebLineWidth = Utils.convertDpToPixel(width);
     }
 
-    public float getWebLineWidth() {
-        return mWebLineWidth;
+    public float getWebLineWidthInner() {
+        return mInnerWebLineWidth;
     }
 
     /**
@@ -260,8 +308,13 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
         mInnerWebLineWidth = Utils.convertDpToPixel(width);
     }
 
-    public float getWebLineWidthInner() {
-        return mInnerWebLineWidth;
+    /**
+     * Returns the alpha value for all web lines.
+     *
+     * @return
+     */
+    public int getWebAlpha() {
+        return mWebAlpha;
     }
 
     /**
@@ -274,13 +327,8 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
         mWebAlpha = alpha;
     }
 
-    /**
-     * Returns the alpha value for all web lines.
-     *
-     * @return
-     */
-    public int getWebAlpha() {
-        return mWebAlpha;
+    public int getWebColor() {
+        return mWebColor;
     }
 
     /**
@@ -294,8 +342,8 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
         mWebColor = color;
     }
 
-    public int getWebColor() {
-        return mWebColor;
+    public int getWebColorInner() {
+        return mWebColorInner;
     }
 
     /**
@@ -309,10 +357,6 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
         mWebColorInner = color;
     }
 
-    public int getWebColorInner() {
-        return mWebColorInner;
-    }
-
     /**
      * If set to true, drawing the web is enabled, if set to false, drawing the
      * whole web is disabled. Default: true
@@ -324,6 +368,15 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
     }
 
     /**
+     * Returns the modulus that is used for skipping web-lines.
+     *
+     * @return
+     */
+    public int getSkipWebLineCount() {
+        return mSkipWebLineCount;
+    }
+
+    /**
      * Sets the number of web-lines that should be skipped on chart web before the
      * next one is drawn. This targets the lines that come from the center of the RadarChart.
      *
@@ -332,15 +385,6 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
     public void setSkipWebLineCount(int count) {
 
         mSkipWebLineCount = Math.max(0, count);
-    }
-
-    /**
-     * Returns the modulus that is used for skipping web-lines.
-     *
-     * @return
-     */
-    public int getSkipWebLineCount() {
-        return mSkipWebLineCount;
     }
 
     @Override
@@ -403,28 +447,70 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
         return this;
     }
 
+    public boolean isDrawGradientArea() {
+        return mDrawGradientArea;
+    }
+
+    /***
+     * Enable drawing the gradient area for the value shape or not.
+     * @param enabled
+     * @return
+     */
     public RadarChart setDrawGradientArea(boolean enabled) {
         this.mDrawGradientArea = enabled;
         return this;
     }
 
-    public boolean isDrawGradientArea() {
-        return mDrawGradientArea;
+    /***
+     * Gets the circle color for the value dot.
+     * @return
+     */
+    public int getEdgeValueCircleColor() {
+        return mEdgeValueCircleColor;
     }
 
-    public int getEdgeValueRadius() {
-        return mEdgeValueRadius;
-    }
-
-    public RadarChart setEdgeValueRadius(int radius) {
-        this.mEdgeValueRadius = radius;
+    /***
+     * Sets the circle color for each value dot.
+     * @param circleColor
+     * @return
+     */
+    public RadarChart setEdgeValueCircleColor(int circleColor) {
+        this.mEdgeValueCircleColor = circleColor;
         return this;
     }
 
+    /***
+     * Gets the circle radius for each value dot.
+     * @return
+     */
+    public int getEdgeValueRadius() {
+        return mEdgeValueCircleRadius;
+    }
+
+    /***
+     * Sets the circle radius for each value dot.
+     *
+     * @param radius
+     * @return
+     */
+    public RadarChart setEdgeValueRadius(int radius) {
+        this.mEdgeValueCircleRadius = radius;
+        return this;
+    }
+
+    /***
+     * Gets the distance value for bezier curve.
+     * @return
+     */
     public int getDistanceToEdgeCurve() {
         return mDistanceToEdgeCurve;
     }
 
+    /***
+     * Sets the distance value for bezier curve.
+     * @param distance
+     * @return
+     */
     public RadarChart setDistanceToEdgeCurve(int distance) {
         this.mDistanceToEdgeCurve = distance;
         return this;

@@ -126,10 +126,7 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
 
             // Next
             // draw the dots for each edge
-            int preColor = mWebPaint.getColor();
-            mWebPaint.setColor(Color.WHITE);
-            c.drawCircle(pOut.x, pOut.y, mChart.getEdgeValueRadius(), mWebPaint);
-            mWebPaint.setColor(preColor);
+            drawValueEdgeDots(c, pOut);
         }
 
         if (dataSet.getEntryCount() > mostEntries) {
@@ -165,6 +162,13 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
 
         MPPointF.recycleInstance(center);
         MPPointF.recycleInstance(pOut);
+    }
+
+    private void drawValueEdgeDots(Canvas c, MPPointF pOut) {
+        int preColor = mWebPaint.getColor();
+        mWebPaint.setColor(mChart.getEdgeValueCircleColor());
+        c.drawCircle(pOut.x, pOut.y, mChart.getEdgeValueRadius(), mWebPaint);
+        mWebPaint.setColor(preColor);
     }
 
     private void drawGradientFilledPath(Canvas c, Path filledPath, int fillColorBeg, int fillColorEnd,

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import com.github.mikephil.charting.renderer.PentagonRadarChartRenderer;
+import com.github.mikephil.charting.renderer.XAxisRendererRadarChartExt;
 
 public class PentagonRadarChart extends RadarChart {
     public PentagonRadarChart(Context context) {
@@ -22,7 +23,8 @@ public class PentagonRadarChart extends RadarChart {
     protected void init() {
         super.init();
 
-        // reattch the custom render
+        // reattach the custom render
         mRenderer = new PentagonRadarChartRenderer(this, mAnimator, mViewPortHandler);
+        mXAxisRenderer = new XAxisRendererRadarChartExt(getViewPortHandler(), mXAxis, this);
     }
 }
