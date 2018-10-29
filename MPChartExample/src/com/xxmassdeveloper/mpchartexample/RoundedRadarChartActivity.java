@@ -3,7 +3,6 @@ package com.xxmassdeveloper.mpchartexample;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 
 import com.github.mikephil.charting.data.RadarData;
@@ -29,18 +28,20 @@ public class RoundedRadarChartActivity extends RadarChartActivity {
         int startColor = Color.argb(0x80, 0, 0xBE, 0xFF);
         int endColor = Color.argb(0x80, 0x14, 0x8C, 0xDC);
 
+        tv.setTextColor(Color.WHITE);
+
         Resources resources = getResources();
 
         // disable the further touch events
         Drawable[] drawables = new Drawable[resDrawables.length];
         for (int i = 0; i < resDrawables.length; i++) {
             drawables[i] = resources.getDrawable(resDrawables[i]);
-
-            // apply the tint color
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                drawables[i].setTint(Color.WHITE);
-            }
         }
+
+        mChart.setBackgroundColor(Color.WHITE);
+        mChart.setWebColor(Color.BLACK);
+        mChart.setWebColorInner(Color.BLACK);
+        mChart.setWebAlpha(0xFF);
 
         mChart.setTouchEnabled(false);
         mChart.setEdgeDrawables(drawables)
@@ -49,10 +50,10 @@ public class RoundedRadarChartActivity extends RadarChartActivity {
                 .setDrawGradientArea(true)
                 .setFilledAreaStartColor(startColor)
                 .setFilledAreaEndColor(endColor)
-                .setEdgeValueCircleColor(Color.WHITE)
+                .setEdgeValueCircleColor(Color.BLACK)
                 .setEdgeValueRadius(8)
                 .setDrawLayerNumber(true)
-                .setNumberTextColor(Color.WHITE)
+                .setNumberTextColor(Color.BLACK)
                 .setNumberPixelSize(resources.getDimensionPixelSize(R.dimen.number_font_size))
                 .setNumberVerticalOffset((int) resources.getDimension(R.dimen.offset_vertical));
     }
@@ -64,17 +65,16 @@ public class RoundedRadarChartActivity extends RadarChartActivity {
 
     @Override
     public void setData() {
-        float mult = 80;
-        float min = 20;
-        int cnt = 5;
+        // test data
+        float[] capacities = new float[]{100.f, 80.f, 60.f, 60.f, 60.f};
+        int cnt = capacities.length;
 
-        ArrayList<RadarEntry> entries2 = new ArrayList<RadarEntry>();
+        ArrayList<RadarEntry> entries2 = new ArrayList<>();
 
-        // NOTE: The order of the entries when being added to the entries array determines their position around the center of
-        // the chart.
+        // NOTE: The order of the entries when being added to the entries array determines their
+        // position around the center of the chart.
         for (int i = 0; i < cnt; i++) {
-            float val2 = (float) (Math.random() * mult) + min;
-            entries2.add(new RadarEntry(val2));
+            entries2.add(new RadarEntry(capacities[i]));
         }
 
         RadarDataSet set2 = new RadarDataSet(entries2, "This Week");
@@ -96,7 +96,7 @@ public class RoundedRadarChartActivity extends RadarChartActivity {
         data.setValueTypeface(mTfLight);
         data.setValueTextSize(8f);
         data.setDrawValues(false);
-        data.setValueTextColor(Color.WHITE);
+        data.setValueTextColor(Color.BLACK);
 
         mChart.setData(data);
 

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 public class RadarChartActivity extends DemoBase {
 
     protected RadarChart mChart;
+    protected TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class RadarChartActivity extends DemoBase {
 
         setContentView(getRadarChartLayoutResource());
 
-        TextView tv = findViewById(R.id.textView);
+        tv = findViewById(R.id.textView);
         tv.setTypeface(mTfLight);
         tv.setTextColor(Color.WHITE);
         tv.setBackgroundColor(Color.rgb(60, 65, 82));

@@ -357,6 +357,7 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
             // normal path effect
             if (j == labelCount - 1) {
                 mWebPaint.setPathEffect(null);
+                mWebPaint.setColor(Color.parseColor("#231F20"));
             }
 
             path.reset();
