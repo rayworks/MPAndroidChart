@@ -50,7 +50,7 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
     /**
      * flag indicating if the web lines should be drawn or not
      */
-    private boolean mDrawWeb = true;
+    protected boolean mDrawWeb = true;
     /**
      * modulus that determines how many labels and web-lines are skipped before the next is drawn
      */
@@ -58,7 +58,7 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
     /**
      * the object reprsenting the y-axis labels
      */
-    private YAxis mYAxis;
+    protected YAxis mYAxis;
     /**
      * Start color for the data path area
      */

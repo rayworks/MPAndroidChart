@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarDataSet;
 import com.github.mikephil.charting.data.RadarEntry;
@@ -25,8 +26,8 @@ public class RoundedRadarChartActivity extends RadarChartActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int startColor = Color.argb(0x80, 0, 0xBE, 0xFF);
-        int endColor = Color.argb(0x80, 0x14, 0x8C, 0xDC);
+        int startColor = Color.argb(0xE6, 0, 0xBE, 0xFF);
+        int endColor = Color.argb(0xE6, 0x14, 0x8C, 0xDC);
 
         tv.setTextColor(Color.WHITE);
 
@@ -37,6 +38,10 @@ public class RoundedRadarChartActivity extends RadarChartActivity {
         for (int i = 0; i < resDrawables.length; i++) {
             drawables[i] = resources.getDrawable(resDrawables[i]);
         }
+
+        // reset the Label number for "3, 4, 5" points only
+        YAxis yAxis = mChart.getYAxis();
+        yAxis.setLabelCount(3, false);
 
         mChart.setBackgroundColor(Color.WHITE);
         mChart.setWebColor(Color.BLACK);
@@ -51,8 +56,9 @@ public class RoundedRadarChartActivity extends RadarChartActivity {
                 .setFilledAreaStartColor(startColor)
                 .setFilledAreaEndColor(endColor)
                 .setEdgeValueCircleColor(Color.BLACK)
-                .setEdgeValueRadius(8)
+                .setEdgeValueRadius(resources.getDimensionPixelSize(R.dimen.value_dot_radius))
                 .setDrawLayerNumber(true)
+                .setDistanceToEdgeCurve(20)
                 .setNumberTextColor(Color.BLACK)
                 .setNumberPixelSize(resources.getDimensionPixelSize(R.dimen.number_font_size))
                 .setNumberVerticalOffset((int) resources.getDimension(R.dimen.offset_vertical));
@@ -66,7 +72,8 @@ public class RoundedRadarChartActivity extends RadarChartActivity {
     @Override
     public void setData() {
         // test data
-        float[] capacities = new float[]{100.f, 80.f, 60.f, 60.f, 60.f};
+        // mapped data set from {100.f, 80.f, 60.f, 60.f, 60.f}
+        float[] capacities = new float[]{90, 60, 30, 30, 30};
         int cnt = capacities.length;
 
         ArrayList<RadarEntry> entries2 = new ArrayList<>();

@@ -11,6 +11,7 @@ import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
+import com.github.mikephil.charting.charts.PentagonRadarChart;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarEntry;
@@ -21,6 +22,11 @@ import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+/***
+ * A customized {@link LineRadarRenderer} for {@link PentagonRadarChart}.
+ *
+ * @see RadarChartRenderer
+ */
 public class PentagonRadarChartRenderer extends LineRadarRenderer {
     private final DashPathEffect dashPathEffect;
     private final Paint numberPaint;
@@ -127,10 +133,6 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
             } else {
                 surface.lineTo(pOut.x, pOut.y);
             }
-
-            // Next
-            // draw the dots for each edge
-            drawValueEdgeDots(c, pOut);
         }
 
         if (dataSet.getEntryCount() > mostEntries) {
@@ -149,6 +151,7 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
             } else {
 
                 if (mChart.isDrawGradientArea()) {
+
                     drawGradientFilledPath(c, surface, mChart.getFilledAreaStartColor(),
                             mChart.getFilledAreaEndColor(), 0, mChart.getHeight());
                 } else {
@@ -157,12 +160,24 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
             }
         }
 
+        // draw the dots above the path
+        for (int j = 0; j < dataSet.getEntryCount(); j++) {
+            RadarEntry e = dataSet.getEntryForIndex(j);
+
+            Utils.getPosition(
+                    center,
+                    (e.getY() - mChart.getYChartMin()) * factor * phaseY,
+                    sliceangle * j * phaseX + mChart.getRotationAngle(), pOut);
+
+            if (Float.isNaN(pOut.x))
+                continue;
+
+            // draw the dots for each edge
+            drawValueEdgeDots(c, pOut);
+        }
+
         mRenderPaint.setStrokeWidth(dataSet.getLineWidth());
         mRenderPaint.setStyle(Paint.Style.STROKE);
-
-        // draw the line (only if filled is disabled or alpha is below 255)
-        if (!dataSet.isDrawFilledEnabled() || dataSet.getFillAlpha() < 255)
-            c.drawPath(surface, mRenderPaint);
 
         MPPointF.recycleInstance(center);
         MPPointF.recycleInstance(pOut);
@@ -170,9 +185,15 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
 
     private void drawValueEdgeDots(Canvas c, MPPointF pOut) {
         int preColor = mWebPaint.getColor();
+        float width = mWebPaint.getStrokeWidth();
+
+        int radius = mChart.getEdgeValueRadius();
+        mWebPaint.setStrokeWidth(radius / 2);
         mWebPaint.setColor(mChart.getEdgeValueCircleColor());
-        c.drawCircle(pOut.x, pOut.y, mChart.getEdgeValueRadius(), mWebPaint);
+        c.drawCircle(pOut.x, pOut.y, radius, mWebPaint);
+
         mWebPaint.setColor(preColor);
+        mWebPaint.setStrokeWidth(width);
     }
 
     private void drawGradientFilledPath(Canvas c, Path filledPath, int fillColorBeg, int fillColorEnd,
@@ -184,7 +205,7 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
 
         // set
         mRenderPaint.setStyle(Paint.Style.FILL);
-        //mRenderPaint.setColor(color);
+        mRenderPaint.setColor(fillColorEnd);
         LinearGradient shader = new LinearGradient(0, 0, width, height, fillColorBeg, fillColorEnd,
                 Shader.TileMode.CLAMP);
         mRenderPaint.setShader(shader);
@@ -349,8 +370,9 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
         MPPointF p2out = MPPointF.getInstance(0, 0);
         for (int j = 0; j < labelCount; j++) {
 
-            // skip the inner 3 layers
-            if (j <= 2) {
+            // FIXME: remove the hardcoded logic
+            // skip the inner N layers
+            if (j <= 0) {
                 continue;
             }
 
@@ -431,7 +453,8 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
                             float centerX = bottomLeftX + (bottomRightX - bottomLeftX) / 2;
                             float centerY = bottomLeftY - mChart.getNumberVerticalOffset();
 
-                            c.drawText(String.valueOf(j), centerX, centerY, numberPaint);
+                            int offset = Math.max(0, 5 - mChart.getYAxis().getLabelCount());
+                            c.drawText(String.valueOf(j + offset), centerX, centerY, numberPaint);
                         }
 
                         path.lineTo(xLeft, yLeft);

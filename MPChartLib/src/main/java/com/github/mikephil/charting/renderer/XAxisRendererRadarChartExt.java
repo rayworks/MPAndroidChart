@@ -26,7 +26,7 @@ public class XAxisRendererRadarChartExt extends XAxisRendererRadarChart {
         paintDash.setAntiAlias(true);
         paintDash.setStyle(Paint.Style.STROKE);
 
-        paintDash.setPathEffect(new DashPathEffect(new float[]{5, 10}, 0));
+        paintDash.setPathEffect(new DashPathEffect(new float[]{5, 15}, 0));
 
         point = new PointF();
     }
@@ -58,6 +58,8 @@ public class XAxisRendererRadarChartExt extends XAxisRendererRadarChart {
         float startX = .0f, startY = .0f;
         int distance = mChart.getDistanceToEdgeCurve();
 
+        float distanceRatio = 1.04f;
+
         Drawable[] drawables = mChart.getEdgeDrawables();
         for (int i = 0; i < mChart.getData().getMaxEntryCountSet().getEntryCount(); i++) {
 
@@ -65,7 +67,7 @@ public class XAxisRendererRadarChartExt extends XAxisRendererRadarChart {
 
             float angle = (sliceangle * i + mChart.getRotationAngle()) % 360f;
 
-            Utils.getPosition(center, mChart.getYRange() * factor
+            Utils.getPosition(center, mChart.getYRange() * factor * distanceRatio
                     + mXAxis.mLabelRotatedWidth / 2f, angle, pOut);
 
             // TODO: remove the duplicate logic as we have it in "PentagonRadarChartRenderer"

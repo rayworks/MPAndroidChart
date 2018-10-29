@@ -6,4 +6,6 @@
 
     <dimen name="offset_vertical">4dp</dimen>
     <dimen name="number_font_size">10sp</dimen>
+
+    <dimen name="value_dot_radius">4dp</dimen>
 </resources>

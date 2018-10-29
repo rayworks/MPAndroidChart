@@ -17,6 +17,8 @@
     <com.github.mikephil.charting.charts.PentagonRadarChart
         android:id="@+id/chart1"
         android:layout_width="match_parent"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
         android:layout_height="0dp"
         android:layout_weight="2" />
 
