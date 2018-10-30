@@ -4,8 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
+import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 import com.github.mikephil.charting.renderer.PentagonRadarChartRenderer;
 import com.github.mikephil.charting.renderer.XAxisRendererRadarChartExt;
+
+import java.util.List;
 
 public class PentagonRadarChart extends RadarChart {
     public PentagonRadarChart(Context context) {
@@ -64,5 +67,14 @@ public class PentagonRadarChart extends RadarChart {
         drawDescription(canvas);
 
         drawMarkers(canvas);
+
+        // draw the value dots at last
+        List<IRadarDataSet> dataSets = getData().getDataSets();
+        for (IRadarDataSet set : dataSets) {
+            if (set.isVisible()) {
+                ((PentagonRadarChartRenderer) mRenderer).drawValueDots(canvas, set);
+            }
+        }
+
     }
 }

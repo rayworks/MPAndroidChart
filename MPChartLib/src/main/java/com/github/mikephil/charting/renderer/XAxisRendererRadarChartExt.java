@@ -56,11 +56,16 @@ public class XAxisRendererRadarChartExt extends XAxisRendererRadarChart {
         float xLeft, yLeft;
         float xRight, yRight;
         float startX = .0f, startY = .0f;
-        int distance = mChart.getDistanceToEdgeCurve();
 
-        float distanceRatio = 1.04f;
+        // NB: Increase the distance to get rid of the overlapped dash lines with icons.
+        // No bezier curves needed here.
+        int distance = (int) (mChart.getDistanceToEdgeCurve() * 3f);
+
+        float distanceRatio = 1.06f;
 
         Drawable[] drawables = mChart.getEdgeDrawables();
+        boolean drawIconEnabled = mChart.isDrawEdgeIcon() && drawables != null && drawables.length > 0;
+
         for (int i = 0; i < mChart.getData().getMaxEntryCountSet().getEntryCount(); i++) {
 
             String label = mXAxis.getValueFormatter().getFormattedValue(i, mXAxis);
@@ -71,20 +76,12 @@ public class XAxisRendererRadarChartExt extends XAxisRendererRadarChart {
                     + mXAxis.mLabelRotatedWidth / 2f, angle, pOut);
 
             // TODO: remove the duplicate logic as we have it in "PentagonRadarChartRenderer"
-            if (mChart.isDrawEdgeIcon() && drawables != null && drawables.length > i) {
+            if (drawIconEnabled) {
                 paintDash.setColor(mChart.getEdgeIconDashLineColor());
 
                 if (path == null) {
                     path = new Path();
                 }
-
-                Drawable drawable = drawables[i];
-                int intrinsicWidth = drawable.getIntrinsicWidth();
-                int intrinsicHeight = drawable.getIntrinsicHeight();
-
-                Utils.drawImage(c, drawable, (int) pOut.x, (int) pOut.y,
-                        intrinsicWidth, intrinsicHeight);
-
 
                 point.x = pOut.getX();
                 point.y = pOut.getY();
@@ -157,6 +154,31 @@ public class XAxisRendererRadarChartExt extends XAxisRendererRadarChart {
 
         if (path != null) {
             c.drawPath(path, paintDash);
+        }
+
+        // draw icons above the dash lines
+        if (drawIconEnabled) {
+            for (int i = 0; i < mChart.getData().getMaxEntryCountSet().getEntryCount(); i++) {
+                float angle = (sliceangle * i + mChart.getRotationAngle()) % 360f;
+
+                Utils.getPosition(center, mChart.getYRange() * factor * distanceRatio
+                        + mXAxis.mLabelRotatedWidth / 2f, angle, pOut);
+
+                if (drawables.length > i) {
+                    paintDash.setColor(mChart.getEdgeIconDashLineColor());
+
+                    if (path == null) {
+                        path = new Path();
+                    }
+
+                    Drawable drawable = drawables[i];
+                    int intrinsicWidth = drawable.getIntrinsicWidth();
+                    int intrinsicHeight = drawable.getIntrinsicHeight();
+
+                    Utils.drawImage(c, drawable, (int) pOut.x, (int) pOut.y,
+                            intrinsicWidth, intrinsicHeight);
+                }
+            }
         }
 
         MPPointF.recycleInstance(center);

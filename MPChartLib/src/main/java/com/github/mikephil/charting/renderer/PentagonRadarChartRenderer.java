@@ -160,7 +160,26 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
             }
         }
 
-        // draw the dots above the path
+        mRenderPaint.setStrokeWidth(dataSet.getLineWidth());
+        mRenderPaint.setStyle(Paint.Style.STROKE);
+
+        MPPointF.recycleInstance(center);
+        MPPointF.recycleInstance(pOut);
+    }
+
+    public void drawValueDots(Canvas c, IRadarDataSet dataSet) {
+        float phaseX = mAnimator.getPhaseX();
+        float phaseY = mAnimator.getPhaseY();
+
+        float sliceangle = mChart.getSliceAngle();
+
+        // calculate the factor that is needed for transforming the value to
+        // pixels
+        float factor = mChart.getFactor();
+
+        MPPointF center = mChart.getCenterOffsets();
+        MPPointF pOut = MPPointF.getInstance(0, 0);
+
         for (int j = 0; j < dataSet.getEntryCount(); j++) {
             RadarEntry e = dataSet.getEntryForIndex(j);
 
@@ -175,19 +194,19 @@ public class PentagonRadarChartRenderer extends LineRadarRenderer {
             // draw the dots for each edge
             drawValueEdgeDots(c, pOut);
         }
-
-        mRenderPaint.setStrokeWidth(dataSet.getLineWidth());
-        mRenderPaint.setStyle(Paint.Style.STROKE);
-
-        MPPointF.recycleInstance(center);
-        MPPointF.recycleInstance(pOut);
     }
 
     private void drawValueEdgeDots(Canvas c, MPPointF pOut) {
         int preColor = mWebPaint.getColor();
         float width = mWebPaint.getStrokeWidth();
 
+        // Fill the area with a stroke circle
         int radius = mChart.getEdgeValueRadius();
+        mWebPaint.setStyle(Paint.Style.FILL);
+        mWebPaint.setColor(Color.WHITE);
+        c.drawCircle(pOut.x, pOut.y, radius, mWebPaint);
+
+        mWebPaint.setStyle(Paint.Style.STROKE);
         mWebPaint.setStrokeWidth(radius / 2);
         mWebPaint.setColor(mChart.getEdgeValueCircleColor());
         c.drawCircle(pOut.x, pOut.y, radius, mWebPaint);

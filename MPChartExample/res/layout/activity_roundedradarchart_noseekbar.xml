@@ -2,24 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.6"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
         android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="YOUR PREFERENCES"
-        android:id="@+id/textView"/>
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <com.github.mikephil.charting.charts.PentagonRadarChart
-        android:id="@+id/chart1"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_height="0dp"
-        android:layout_weight="2" />
+        android:layout_marginEnd="40dp">
+
+        <com.github.mikephil.charting.charts.PentagonRadarChart
+            android:id="@+id/chart1"
+            app:layout_constraintDimensionRatio="4:5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
+    </android.support.constraint.ConstraintLayout>
+
 
 </LinearLayout>
