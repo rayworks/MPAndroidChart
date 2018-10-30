@@ -23,7 +23,7 @@
         android:layout_marginEnd="40dp">
 
         <com.github.mikephil.charting.charts.PentagonRadarChart
-            android:id="@+id/chart1"
+            android:id="@+id/radar_chart"
             app:layout_constraintDimensionRatio="4:5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
